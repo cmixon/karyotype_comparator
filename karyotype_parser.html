@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <title>Karyotype Comparator</title>
+</head>
+<body>
+    <h3 style="text-align: center;">Karyotype Comparator</h3>
+    <form id="Input"> Enter previous karyotype: <br>
+        <textarea type ="text" class="Input" id="previousKaryotype" cols="80" rows="5"></textarea>
+<br>
+    <span id="newKaryotype">Enter current karyotype: </span><br>
+        <textarea type="text" class="Input" id="currentKaryotype" cols="80" rows="5"></textarea><br>
+    </form>
+    <button onclick="submit()">Analyze</button>
+    <button onclick="reload()">Reset</button>
+        <div id="results">These abnormalities are <strong style="color:green">gained</strong>: <br><span id="gained"></span><br><br>
+    These abnormalities are <strong style="color:red">lost</strong>: <br><span id="lost"></span><br><br>
+    These abnormalities are <strong>retained</strong>: <br><span id="kept"></span></div>
+
+
+</body>
+<script>
+
+window.onbeforeunload = function () {
+            var previous = document.getElementById("previousKaryotype").value;
+            sessionStorage.setItem("previous", previous);
+            var current = document.getElementById("currentKaryotype").value;
+            sessionStorage.setItem("current", current);
+}
+window.onload = function () {               
+            var x = sessionStorage.getItem("previous");
+            $('#previousKaryotype').val(x);
+            var y = sessionStorage.getItem("current");
+            $('#currentKaryotype').val(y);
+}
+
+    let previousKaryotype=[];
+    let currentKaryotype=[];
+
+    previousKaryotype =document.getElementById("previousKaryotype").value;
+    previous_Array=previousKaryotype.split(/[,\/]+/);
+    console.log(previous_Array);
+    currentKaryotype=document.getElementById("currentKaryotype").value;
+    current_Array=currentKaryotype.split(/[,\/]+/);
+ 
+    //diff arrays; use as alt to notInCurrent() and notInPrevious()
+
+    const diffArrays = (array1, array2) =>{
+        const filtered = array1.filter(el => {
+            return array2.indexOf(el) === -1;
+        });
+            return filtered;
+    };
+
+    //filter to show what is in first but not in second
+    const notInCurrent = (previous_Array, current_Array) => {
+        const filtered = previous_Array.filter(el => {
+        return current_Array.indexOf(el) === -1;
+   });
+        return filtered;
+};
+console.log(notInCurrent(previous_Array, current_Array));
+
+//filter to show what is in second but not in first
+
+const notInPrevious = (current_Array, previous_Array) => {
+        const filtered = current_Array.filter(el => {
+        return previous_Array.indexOf(el) === -1;
+   });
+        return filtered;
+};
+
+const inBoth = (array1, array2) => {
+        const filtered = array1.filter(el => array2.includes(el));
+        return filtered;
+};
+console.log(inBoth(current_Array, previous_Array));
+console.log(notInPrevious(current_Array, previous_Array));
+let prevKary=notInPrevious(current_Array, previous_Array);
+let currKary=notInCurrent(previous_Array, current_Array);
+let sameKary=inBoth(current_Array, previous_Array);
+
+//write what is in second but not first
+document.getElementById("gained").innerHTML=prevKary.toString();
+//write what is in first but not second
+document.getElementById("lost").innerHTML=currKary.toString();
+//write what is retained
+document.getElementById("kept").innerHTML=sameKary.toString();
+
+//analyze input data and reset functions
+
+function submit(){
+    window.location.reload();
+    }
+ function reload(){
+    document.getElementById("Input").reset(); //clears form data
+    document.getElementById("gained").innerHTML=""; //overwrites results fields        document.getElementById("lost").innerHTML="";
+    document.getElementById("kept").innerHTML="";
+    document.getElementsByClassName("Input").reload();
+    }
+</script
+</html>
