@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="karyotype, comparison, comparator, cytogenetics, chromosome"
+    <meta name="keywords" content="karyotype, comparison, comparator, cytogenetics, chromosome">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <title>Karyotype Comparator</title>
 </head>
@@ -23,12 +23,12 @@
 </style>
 <body>
     <h3 style="text-align: center;">Karyotype Comparator</h3>
-    <form id="Input"> Enter previous karyotype: <br>
+    Enter previous karyotype: <br>
         <textarea type ="text" class="Input" id="previousKaryotype" cols="80" rows="5"></textarea>
 <br>
     <span id="newKaryotype">Enter current karyotype: </span><br>
         <textarea type="text" class="Input" id="currentKaryotype" cols="80" rows="5"></textarea><br>
-    </form>
+   
     <p>
     <button class="button" onclick="submit()">Analyze</button>&emsp;
     <button class="button" onclick="reload()">Reset</button>&emsp;
@@ -53,22 +53,25 @@ window.onload = function () {
             var y = sessionStorage.getItem("current");
             $('#currentKaryotype').val(y);
 }
-
-    let previousKaryotype=[];
-    let currentKaryotype=[];
+console.log(sessionStorage.getItem("previous"));
+    //let previousKaryotype=[];
+    //let currentKaryotype=[];
    //to identify only structural anomalies
    // let anoms = new RegExp('[a-z]+\\([0-9]+;[0-9]+\\)\\([pq][0-9]+;[pq][0-9]+\\)|[a-z]+\\([0-9]+\\)\\([pq][0-9]+\\)','g');
 //to ignore breakpoints
     let noBreakpoints = new RegExp('[a-z]+\\([0-9]+\\)|[a-z]+\\([0-9]+;[0-9]+\\)|[\+\-][0-9]+','g');
-    previousKaryotype =document.getElementById("previousKaryotype").value;
-    previous_Array=previousKaryotype.split(/[,\/]+/);
+    let previousKaryotype = sessionStorage.getItem("previous");
+    console.log(previousKaryotype);
+    let previous_Array = previousKaryotype.split(/[,\/]+/);
     console.log(previous_Array);
-    currentKaryotype=document.getElementById("currentKaryotype").value;
-    current_Array=currentKaryotype.split(/[,\/]+/);
+    let currentKaryotype=sessionStorage.getItem("current");
+    let current_Array=currentKaryotype.split(/[,\/]+/);
     console.log(current_Array.toString().match(noBreakpoints));
     console.log(previous_Array.toString().match(noBreakpoints));
 
- 
+ let testVariable = document.getElementById("previousKaryotype").innerHTML;
+ console.log(testVariable);
+
     //diff arrays; use as alt to notInCurrent() and notInPrevious()
 
     const diffArrays = (array1, array2) =>{
