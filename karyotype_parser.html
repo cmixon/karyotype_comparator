@@ -23,12 +23,12 @@
 </style>
 <body>
     <h3 style="text-align: center;">Karyotype Comparator</h3>
-    Enter previous karyotype: <br>
+    <form id="Input"><span></span>Enter previous karyotype: </span><br>
         <textarea type ="text" class="Input" id="previousKaryotype" cols="80" rows="5"></textarea>
 <br>
     <span id="newKaryotype">Enter current karyotype: </span><br>
         <textarea type="text" class="Input" id="currentKaryotype" cols="80" rows="5"></textarea><br>
-   
+   </form>
     <p>
     <button class="button" onclick="submit()">Analyze</button>&emsp;
     <button class="button" onclick="reload()">Reset</button>&emsp;
@@ -64,10 +64,10 @@ console.log(sessionStorage.getItem("previous"));
     console.log(previousKaryotype);
    // let previous_Array = previousKaryotype.split(/[,\/]+/)
    
-    let previous_Array = previousKaryotype.replace(/([0-9a-z]+)\[/, "$1,[").split(/[,]+/);
+    let previous_Array = previousKaryotype.replace(/\)\[/g, "),[").replace(/\]\/([0-9]+)/g, "],$1").replace(/([0-9a-z]+)\[/g,"$1,[").split(/[,]+/);
     console.log(previous_Array);
     let currentKaryotype=sessionStorage.getItem("current");
-    let current_Array=currentKaryotype.replace(/([0-9a-z]+)\[/, "$1,[").split(/[,]+/);
+    let current_Array=currentKaryotype.replace(/\)\[/g, "),[").replace(/\]\/([0-9]+)/g, "],$1").replace(/([0-9a-z]+)\[/g,"$1,[").split(/[,]+/);
     console.log(current_Array.toString().match(noBreakpoints));
     console.log(previous_Array.toString().match(noBreakpoints));
 
