@@ -17,7 +17,7 @@
     }
     .button:hover{
         background-color: darkslateblue;
-        border-radius: 12px;
+        border-radius: 6px;
         color: yellowgreen;
     }
 </style>
@@ -64,10 +64,10 @@ console.log(sessionStorage.getItem("previous"));
     console.log(previousKaryotype);
    // let previous_Array = previousKaryotype.split(/[,\/]+/)
    
-    let previous_Array = previousKaryotype.replace(/\)\[/g, "),[").replace(/\]\/([0-9]+)/g, "],$1").replace(/([0-9a-z]+)\[/g,"$1,[").split(/[,]+/);
+    let previous_Array = previousKaryotype.replace(/\)\[/g, "),[").replace(/\]\/([0-9]+)/g, "],/$1").replace(/([0-9a-z]+)\[/g,"$1,[").split(/[,]+/);
     console.log(previous_Array);
     let currentKaryotype=sessionStorage.getItem("current");
-    let current_Array=currentKaryotype.replace(/\)\[/g, "),[").replace(/\]\/([0-9]+)/g, "],$1").replace(/([0-9a-z]+)\[/g,"$1,[").split(/[,]+/);
+    let current_Array=currentKaryotype.replace(/\)\[/g, "),[").replace(/\]\/([0-9]+)/g, "],/$1").replace(/([0-9a-z]+)\[/g,"$1,[").split(/[,]+/);
     console.log(current_Array.toString().match(noBreakpoints));
     console.log(previous_Array.toString().match(noBreakpoints));
 
@@ -111,7 +111,7 @@ let prevKary=notInPrevious(current_Array, previous_Array);
 let currKary=notInCurrent(previous_Array, current_Array);
 let sameKary=inBoth(current_Array, previous_Array);
 let sameKary_unique = [...new Set(sameKary)];
-
+console.log(prevKary.toString().replace(/\[[0-9]+\/[0-9]+\]/, null));
 console.log(prevKary.toString().match(noBreakpoints));
 //write what is in second but not first
 document.getElementById("gained").innerHTML=prevKary.toString();
@@ -148,7 +148,7 @@ function submit(){
     }
  function reload(){
     document.getElementById("Input").reset(); //clears form data
-    document.getElementById("gained").innerHTML=""; //overwrites results fields        document.getElementById("lost").innerHTML="";
+    document.getElementById("gained").innerHTML=""; //overwrites results fields        
     document.getElementById("lost").innerHTML="";
     document.getElementById("kept").innerHTML="";
  }
