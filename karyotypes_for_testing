@@ -1,0 +1,10 @@
+89~90,XXYY,add(1)(p36.1)x2,del(1)(p34)x2,-2,-2,del(2)(p21)x2,-3,-3,add(6)(p25)x2,add(8)(q24)x2,del(11)(q13)x2,-12,-12,add(12)(q24.1)x2,-16,-16,add(17)(p11.2)x2,-18,-18,-18,-21,-21,-21,-21,-22,-22,+14~16mar[cp2]/46,XY[18]
+ 
+45~49,XY,del(1)(p36.1),add(1)(p36.1)x1-2,add(1)(q32),add(2)(p23),add(3)(p21),add(3)(p25),+4,add(6)(p25),add(8)(q24),-9,del(11)(q13),add(12)(q24.1)x1-2,-13,-16,add(17)(p11.2),-18,add(19)(q13.3),-21,iso(21)(q10),-22,+5~10mar[cp15]/46,XY[5]
+ 
+ retained:
+ del1p,add1p,add6p,add8q,del11,add12q,-16,add17,-18,-21,-22,mar
+ 
+ for add, del ignore after arm designation
+ ignore x2 after abnormality
+ ignore # of markers

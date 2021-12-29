@@ -61,19 +61,19 @@
     //console.log(sessionStorage.getItem("previous"));
 
     //to ignore breakpoints
-    let noBreakpoints = new RegExp('[a-z]+\\([0-9]+\\)|[a-z]+\\([0-9]+;[0-9]+\\)|[\+\-][0-9a-z]+', 'g');
+    let noBreakpoints = new RegExp('[a-z]+\\([0-9]+\\)|[a-z]+\\([0-9]+;[0-9]+\\)|[\+\-][0-9]+|mar|dmin', 'g');
     let previousKaryotype = sessionStorage.getItem("previous");
     //console.log(previousKaryotype);
 
     // let previous_Array = previousKaryotype.split(/[,\/]+/)
-
-    let previous_Array = previousKaryotype.replace(/\)\[/g, "),[").replace(/\]\/([0-9]+)/g, "],/$1").replace(/([0-9a-z]+)\[/g, "$1,[").split(/[,]+/);
-    //console.log(previous_Array);
+    //handle )[], / between karyotypes, mar etc. before [], ranges as in x1-2
+    let previous_Array = previousKaryotype.replace(/\)\[/g, "),[").replace(/\]\/([0-9]+)/g, "],/$1").replace(/([0-9a-z]+)\[/g, "$1,[").replace(/[0-9]+-[0-9]/g,"").replace(/([0-9]+)([a-z]+)/g, "$1,$2").split(/[,]+/);
+    console.log(previous_Array);
     let currentKaryotype = sessionStorage.getItem("current");
-    let current_Array = currentKaryotype.replace(/\)\[/g, "),[").replace(/\]\/([0-9]+)/g, "],/$1").replace(/([0-9a-z]+)\[/g, "$1,[").split(/[,]+/);
+    let current_Array = currentKaryotype.replace(/\)\[/g, "),[").replace(/\]\/([0-9]+)/g, "],/$1").replace(/([0-9a-z]+)\[/g, "$1,[").replace(/[0-9]+-[0-9]+/g, "").replace(/([0-9]+)([a-z]+)/g, "$1,$2").split(/[,]+/);
     //console.log(current_Array.toString().match(noBreakpoints));
     //console.log(previous_Array.toString().match(noBreakpoints));
-
+    console.log(current_Array);
     let testVariable = document.getElementById("previousKaryotype").innerHTML;
     //console.log(testVariable);
 
@@ -129,8 +129,8 @@
     let prevKaryNB = notInPrevious(current_Array_noBreakpoints, previous_Array_noBreakpoints);  //same as prevKary with No Breakpoints
     let currKaryNB = notInCurrent(previous_Array_noBreakpoints, current_Array_noBreakpoints);
     let sameKaryNB = inBoth(current_Array_noBreakpoints, previous_Array_noBreakpoints);
-    //console.log(current_Array_noBreakpoints);
-    //console.log(previous_Array_noBreakpoints);
+    console.log(current_Array_noBreakpoints);
+    console.log(previous_Array_noBreakpoints);
 
     let uniqueNB = [...new Set(sameKaryNB)]; //removes duplicates by first creating a Set then converting back to Array
     //console.log(uniqueNB);
