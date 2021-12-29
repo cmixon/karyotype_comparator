@@ -70,11 +70,12 @@
     let previous_Array = previousKaryotype.replace(/\)\[/g, "),[")
     .replace(/\]\/([0-9]+)/g, "],/$1")
     .replace(/([0-9a-z]+)\[/g, "$1,[")
-    .replace(/[0-9]+-[0-9]/g,"")
-    .replace(/x[0-9]+/g,"x")
+    .replace(/[0-9]+-[0-9]/g, "")
+    .replace(/x[0-9]/g, "")
+    .replace(/x/g,"")
     .replace(/([0-9]+)([a-z]+)/g, "$1,$2")
-    .replace(/XY\[[0-9]+\]/g,"XY")
-    .replace(/XX\[[0-9]+\]/g,"XX")
+    .replace(/46,XY\[[0-9]+\]/g,"46XY")
+    .replace(/46,XX\[[0-9]+\]/g,"46XX")
     .split(/[,]+/);
     console.log(previous_Array);
     let currentKaryotype = sessionStorage.getItem("current");
@@ -82,10 +83,11 @@
     .replace(/\]\/([0-9]+)/g, "],/$1")
     .replace(/([0-9a-z]+)\[/g, "$1,[")
     .replace(/[0-9]+-[0-9]+/g, "")
-    .replace(/x[0-9]+/g,"x")
+    .replace(/x[0-9]+/g, "")
+    .replace(/x/g,"")
     .replace(/([0-9]+)([a-z]+)/g, "$1,$2")
-    .replace(/XY\[[0-9]+\]/g,"XY")
-    .replace(/XX\[[0-9]+\]/g,"XX")
+    .replace(/46,XY\[[0-9]+\]/g,"46XY")
+    .replace(/46,XX\[[0-9]+\]/g,"46XX")
     .split(/[,]+/);
     //console.log(current_Array.toString().match(noBreakpoints));
     //console.log(previous_Array.toString().match(noBreakpoints));
@@ -130,6 +132,8 @@
     let sameKary_unique = [...new Set(sameKary)];
     //console.log(prevKary.toString().replace(/\[[0-9]+\/[0-9]+\]/, null));
     //console.log(prevKary.toString().match(noBreakpoints));
+    console.log(currKary);
+    console.log(prevKary);
     //write what is in second but not first
     document.getElementById("gained").innerHTML = prevKary.toString();
     //write what is in first but not second
