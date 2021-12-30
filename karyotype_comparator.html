@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="karyotype, comparison, comparator, cytogenetics, chromosome">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <title>Karyotype Comparator</title>
+</head>
+<style>
+    .button {
+        font-size: 18px;
+        background-color: gray;
+        color: white;
+        transition-duration: 0.1s;
+    }
+
+    .button:hover {
+        background-color: darkslateblue;
+        border-radius: 6px;
+        color: yellowgreen;
+    }
+</style>
+
+<body>
+    <h3 style="text-align: center;">Karyotype Comparator</h3>
+    <form id="Input"><span></span>Enter previous karyotype: </span><br>
+        <textarea type="text" class="Input" id="previousKaryotype" cols="80" rows="5"></textarea>
+        <br>
+        <span id="newKaryotype">Enter current karyotype: </span><br>
+        <textarea type="text" class="Input" id="currentKaryotype" cols="80" rows="5"></textarea><br>
+    </form>
+    <p>
+        <button class="button" onclick="submit()">Analyze</button>&emsp;
+        <button class="button" onclick="reload()">Reset</button>&emsp;
+        <button class="button" onclick="ignoreBreakpoints()">Ignore Breakpoints</button>
+    </p>
+    <div id="results">These values are <strong style="color:green">gained</strong>: <br><span
+            id="gained"></span><br><br>
+        These values are <strong style="color:red">lost</strong>: <br><span id="lost"></span><br><br>
+        These values are <strong>retained</strong>: <br><span id="kept"></span></div>
+
+
+</body>
+<script>
+
+    window.onbeforeunload = function () {
+        var previous = document.getElementById("previousKaryotype").value;
+        sessionStorage.setItem("previous", previous);
+        var current = document.getElementById("currentKaryotype").value;
+        sessionStorage.setItem("current", current);
+    }
+    window.onload = function () {
+        var x = sessionStorage.getItem("previous");
+        $('#previousKaryotype').val(x);
+        var y = sessionStorage.getItem("current");
+        $('#currentKaryotype').val(y);
+    }
+    //console.log(sessionStorage.getItem("previous"));
+
+    //to ignore breakpoints
+    let noBreakpoints = new RegExp('[a-z]+\\([0-9]+\\)|[a-z]+\\([0-9]+;[0-9]+\\)|[\+\-][0-9]+|mar|dmin', 'g');
+    let previousKaryotype = sessionStorage.getItem("previous");
+    //console.log(previousKaryotype);
+
+    // let previous_Array = previousKaryotype.split(/[,\/]+/)
+    //handle )[], / between karyotypes, mar etc. before [], ranges as in x1-2
+    let previous_Array = previousKaryotype.replace(/\)\[/g, "),[")
+    .replace(/\]\/([0-9]+)/g, "],/$1")
+    .replace(/([0-9a-z]+)\[/g, "$1,[")
+    .replace(/x[0-9]+-[0-9]/g, "")
+    .replace(/x[0-9]+~[0-9]/g,"")
+    .replace(/x[0-9]/g, "")
+    .replace(/x/g,"")
+    .replace(/([0-9]+)([a-z]+)/g, "$1,$2")
+    .replace(/46,XY\[[0-9]+\]/g,"46XY")
+    .replace(/46,XX\[[0-9]+\]/g,"46XX")
+    .split(/[,]+/);
+    console.log(previous_Array);
+    let currentKaryotype = sessionStorage.getItem("current");
+    let current_Array = currentKaryotype.replace(/\)\[/g, "),[")
+    .replace(/\]\/([0-9]+)/g, "],/$1")
+    .replace(/([0-9a-z]+)\[/g, "$1,[")
+    .replace(/x[0-9]+-[0-9]+/g, "")
+    .replace(/x[0-9]+~[0-9]/g, "")
+    .replace(/x[0-9]+/g, "")
+    .replace(/x/g,"")
+    .replace(/([0-9]+)([a-z]+)/g, "$1,$2")
+    .replace(/46,XY\[[0-9]+\]/g,"46XY")
+    .replace(/46,XX\[[0-9]+\]/g,"46XX")
+    .split(/[,]+/);
+    //console.log(current_Array.toString().match(noBreakpoints));
+    //console.log(previous_Array.toString().match(noBreakpoints));
+    console.log(current_Array);
+    let testVariable = document.getElementById("previousKaryotype").innerHTML;
+    //console.log(testVariable);
+
+    //diff arrays; use as alt to notInCurrent() and notInPrevious()
+    const diffArrays = (array1, array2) => {
+        const filtered = array1.filter(el => {
+            return array2.indexOf(el) === -1;
+        });
+        return filtered;
+    };
+
+    //filter to show what is in first but not in second
+    const notInCurrent = (previous_Array, current_Array) => {
+        const filtered = previous_Array.filter(el => {
+            return current_Array.indexOf(el) === -1;
+        });
+        return filtered;
+    };
+    //console.log(notInCurrent(previous_Array, current_Array));
+
+    //filter to show what is in second but not in first
+    const notInPrevious = (current_Array, previous_Array) => {
+        const filtered = current_Array.filter(el => {
+            return previous_Array.indexOf(el) === -1;
+        });
+        return filtered;
+    };
+
+    const inBoth = (array1, array2) => {
+        const filtered = array1.filter(el => array2.includes(el));
+        return filtered;
+    };
+    //console.log(inBoth(current_Array, previous_Array));
+    //console.log(notInPrevious(current_Array, previous_Array));
+    let prevKary = notInPrevious(current_Array, previous_Array);
+    let currKary = notInCurrent(previous_Array, current_Array);
+    let sameKary = inBoth(current_Array, previous_Array);
+    let sameKary_unique = [...new Set(sameKary)];
+    //console.log(prevKary.toString().replace(/\[[0-9]+\/[0-9]+\]/, null));
+    //console.log(prevKary.toString().match(noBreakpoints));
+    console.log(currKary);
+    console.log(prevKary);
+    //write what is in second but not first
+    document.getElementById("gained").innerHTML = prevKary.toString();
+    //write what is in first but not second
+    document.getElementById("lost").innerHTML = currKary.toString();
+    //write what is retained
+    document.getElementById("kept").innerHTML = sameKary_unique.toString();
+
+    //ignore breakpoints by matching string on regex noBreakpoints
+
+    let current_Array_noBreakpoints = current_Array.toString().match(noBreakpoints);
+    let previous_Array_noBreakpoints = previous_Array.toString().match(noBreakpoints);
+
+    let prevKaryNB = notInPrevious(current_Array_noBreakpoints, previous_Array_noBreakpoints);  //same as prevKary with No Breakpoints
+    let currKaryNB = notInCurrent(previous_Array_noBreakpoints, current_Array_noBreakpoints);
+    let sameKaryNB = inBoth(current_Array_noBreakpoints, previous_Array_noBreakpoints);
+    console.log(current_Array_noBreakpoints);
+    console.log(previous_Array_noBreakpoints);
+
+    let uniqueNB = [...new Set(sameKaryNB)]; //removes duplicates by first creating a Set then converting back to Array
+    //console.log(uniqueNB);
+
+
+    function ignoreBreakpoints() {
+        //write what is in second but not first
+        document.getElementById("gained").innerHTML = prevKaryNB.toString();
+        //write what is in first but not second
+        document.getElementById("lost").innerHTML = currKaryNB.toString();
+        //write what is retained
+        document.getElementById("kept").innerHTML = uniqueNB.toString();
+    }
+    //analyze input data and reset functions
+
+    function submit() {
+        window.location.reload();
+    }
+    function reload() {
+        document.getElementById("Input").reset(); //clears form data
+        document.getElementById("gained").innerHTML = ""; //overwrites results fields        
+        document.getElementById("lost").innerHTML = "";
+        document.getElementById("kept").innerHTML = "";
+    }
+</script>
+
+</html>
